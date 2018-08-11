@@ -18,6 +18,8 @@ public class space : MonoBehaviour {
     public space obstacle_space; // For key space to unlock obstackle space
     public GameObject obstacle;
     public float ray_length = 20;
+
+    public bool key_exists = false;
 	// Use this for initialization
 	void Start ()
     {
@@ -84,6 +86,8 @@ public class space : MonoBehaviour {
     {
         Queue<space> queue = new Queue<space>();
         List<space> visited = new List<space>();
+        bool key_found = false;
+        bool goal_found = false;
         queue.Enqueue(this);
 
         while(queue.Count > 0)
@@ -92,8 +96,18 @@ public class space : MonoBehaviour {
 
             if (s.is_goal)
             {
+                goal_found = true;
+            }
+            if (s.is_key)
+            {
+                key_found = true;
+            }
+
+            if((key_exists && key_found && goal_found) || (!key_exists && goal_found))
+            {
                 return true;
             }
+
             visited.Add(s);
             for (int i = 0; i < s.connections.Length; i++)
             { 
@@ -132,16 +146,17 @@ public class space : MonoBehaviour {
 
     IEnumerator fade(float alpha)
     {
+        float goal_a = alpha * 255;
         Material material = GetComponent<MeshRenderer>().materials[0];
         Color color = material.color;
 
-        while(color.a > alpha)
+        while(color.a > goal_a)
         {
-            fade_amount += (0.001f * Time.deltaTime);
-            material.color = new Color(color.r, color.g, color.b, fade_amount);
-            transform.GetComponent<MeshRenderer>().materials[0] = material;
+            color.a -= 1f * Time.deltaTime;
+            material.color =  new Color(color.r, color.g, color.b, color.a);
             yield return new WaitForEndOfFrame();
         }
-        fade_amount = 0;
+        // completely removes this after fading
+        this.gameObject.SetActive(false);
     }
 }

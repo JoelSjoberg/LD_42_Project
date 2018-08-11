@@ -6,12 +6,6 @@ public class floater : MonoBehaviour {
 
     public Vector3 dest;
     public space start_space;
-
-	// Use this for initialization
-	void Start ()
-    {
-
-    }
 	
 	// Update is called once per frame
 	void Update ()
