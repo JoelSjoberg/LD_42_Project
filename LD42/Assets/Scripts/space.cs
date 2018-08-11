@@ -13,8 +13,11 @@ public class space : MonoBehaviour {
     private int max_visits = 5;
 
     // assign one goal space per level
-    public bool is_goal = false;
+    public bool is_goal = false, is_obstacle = false, is_key = false;
 
+    public space obstacle_space; // For key space to unlock obstackle space
+    public GameObject obstacle;
+    public float ray_length = 20;
 	// Use this for initialization
 	void Start ()
     {
@@ -27,12 +30,12 @@ public class space : MonoBehaviour {
 
 	}
 
-    private void get_connections()
+    public void get_connections()
     {
         RaycastHit hit;
 
         // D-direction
-        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.right), out hit, Mathf.Infinity))
+        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.right), out hit, ray_length))
         {
             {
                 connections[0] = hit.transform.gameObject.GetComponent<space>();
@@ -40,7 +43,7 @@ public class space : MonoBehaviour {
         }
 
         // S-direction
-        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.back), out hit, Mathf.Infinity))
+        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.back), out hit, ray_length))
         {
             {
                 connections[1] = hit.transform.gameObject.GetComponent<space>();
@@ -48,7 +51,7 @@ public class space : MonoBehaviour {
         }
 
         // A-direction
-        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.left), out hit, Mathf.Infinity))
+        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.left), out hit, ray_length))
         {
             {
                 connections[2] = hit.transform.gameObject.GetComponent<space>();
@@ -56,7 +59,7 @@ public class space : MonoBehaviour {
         }
 
         // W-direction
-        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, Mathf.Infinity)) 
+        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, ray_length)) 
         {
             {
                 connections[3] = hit.transform.gameObject.GetComponent<space>();
@@ -69,7 +72,7 @@ public class space : MonoBehaviour {
     {
         if (connections[index] != null)
         {
-            if (!connections[index].broken) return connections[index];
+            if (!connections[index].broken && !connections[index].is_obstacle) return connections[index];
             return null;
         }
         return null;
@@ -102,6 +105,12 @@ public class space : MonoBehaviour {
             }
         }
         return false;
+    }
+
+    public void remove_obstacle()
+    {
+        this.is_obstacle = false;
+        Destroy(this.obstacle);
     }
 
     // Decay after each visit, if visited enough, break it and fade outue
