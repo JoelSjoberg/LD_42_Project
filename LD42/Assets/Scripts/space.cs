@@ -11,19 +11,19 @@ public class space : MonoBehaviour {
     public bool broken = false;
     public int visits_before_break = 1;
     private int max_visits = 5;
-    // graph search variables, if I have time for ai
-    private int distance = -1;
 
+    // assign one goal space per level
     public bool is_goal = false;
 
 	// Use this for initialization
-	void Start () {
-
+	void Start ()
+    {
         get_connections();
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+    {
 
 	}
 
@@ -71,21 +71,40 @@ public class space : MonoBehaviour {
         {
             if (!connections[index].broken) return connections[index];
             return null;
-
         }
         return null;
     }
 
-    // check if it is possible to win from this space
-    bool win_possible()
+    // Returns true if the player can still reach the goal, false otherwise
+    // breadth first search
+    public bool space_connected_to_goal()
     {
-        // TODO implement dijkstras algorithm for shortest path finding(alternatively, implement A*)
+        Queue<space> queue = new Queue<space>();
+        List<space> visited = new List<space>();
+        queue.Enqueue(this);
 
+        while(queue.Count > 0)
+        {
+            space s = queue.Dequeue();
+
+            if (s.is_goal)
+            {
+                return true;
+            }
+            visited.Add(s);
+            for (int i = 0; i < s.connections.Length; i++)
+            { 
+                // check that it is not null, that it hasn't been visited and that it can be travelled accross
+                if(s.connections[i] != null && !visited.Contains(s.connections[i]) && s.connections[i].broken == false)
+                {
+                    queue.Enqueue(s.connections[i]);
+                }
+            }
+        }
         return false;
     }
 
-
-    // Decay after each visit, if visited enough, break it and fade out
+    // Decay after each visit, if visited enough, break it and fade outue
     public void decay()
     {
         visits_before_break -= 1;
@@ -99,7 +118,9 @@ public class space : MonoBehaviour {
         } 
     }
 
+    // fade efter decay
     float fade_amount = 0.0f;
+
     IEnumerator fade(float alpha)
     {
         Material material = GetComponent<MeshRenderer>().materials[0];

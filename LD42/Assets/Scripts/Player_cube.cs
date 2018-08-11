@@ -50,6 +50,10 @@ public class Player_cube : MonoBehaviour {
         current_space.decay();
         current_space = space_to_move_to;
 
+        // Bugged
+        print(current_space.space_connected_to_goal());
+
+
         space_to_move_to = null;
         StartCoroutine(move_player(current_space.transform.position));
     }
