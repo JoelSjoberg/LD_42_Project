@@ -8,22 +8,23 @@ public class space : MonoBehaviour {
 
     // variables for gameplay
     public space[] connections = new space[4];              // Can only be 4 long for directions left, right, up, down
-    public bool visited_by_player = false;
-
+    public bool broken = false;
+    public int visits_before_break = 1;
+    private int max_visits = 5;
     // graph search variables, if I have time for ai
-    private bool visited_search = false;
-    private int bfi = -1;
+    private int distance = -1;
+
+    public bool is_goal = false;
 
 	// Use this for initialization
 	void Start () {
-        //connections = get_valid_connections();
-        BoxCollider collider = GetComponent<BoxCollider>();
+
         get_connections();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
+
 	}
 
     private void get_connections()
@@ -68,10 +69,49 @@ public class space : MonoBehaviour {
     {
         if (connections[index] != null)
         {
-            if (!connections[index].visited_by_player) return connections[index];
+            if (!connections[index].broken) return connections[index];
             return null;
 
         }
         return null;
+    }
+
+    // check if it is possible to win from this space
+    bool win_possible()
+    {
+        // TODO implement dijkstras algorithm for shortest path finding(alternatively, implement A*)
+
+        return false;
+    }
+
+
+    // Decay after each visit, if visited enough, break it and fade out
+    public void decay()
+    {
+        visits_before_break -= 1;
+
+        float fade_amount = 1 - (1 / (visits_before_break + 1));
+        StartCoroutine(fade(fade_amount));
+
+        if (visits_before_break <= 0)
+        {
+            broken = true;
+        } 
+    }
+
+    float fade_amount = 0.0f;
+    IEnumerator fade(float alpha)
+    {
+        Material material = GetComponent<MeshRenderer>().materials[0];
+        Color color = material.color;
+
+        while(color.a > alpha)
+        {
+            fade_amount += (0.001f * Time.deltaTime);
+            material.color = new Color(color.r, color.g, color.b, fade_amount);
+            transform.GetComponent<MeshRenderer>().materials[0] = material;
+            yield return new WaitForEndOfFrame();
+        }
+        fade_amount = 0;
     }
 }
