@@ -20,7 +20,7 @@ public class space : MonoBehaviour {
     public GameObject obstacle;
     public float ray_length = 20;
 
-    public Scene next_scene;
+    public string next_scene;
 
 	// Use this for initialization
 	void Start ()
@@ -171,6 +171,7 @@ public class space : MonoBehaviour {
 
     public void load_next_scene()
     {
-        SceneManager.LoadScene(next_scene.name);
+
+        SceneManager.LoadScene(next_scene);
     }
 }

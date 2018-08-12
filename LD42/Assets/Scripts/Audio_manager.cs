@@ -48,7 +48,7 @@ public class Audio_manager : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-		
+        play("main_theme");
 	}
 	
 	// Update is called once per frame

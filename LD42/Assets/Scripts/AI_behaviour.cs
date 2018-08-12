@@ -35,16 +35,21 @@ public class AI_behaviour : MonoBehaviour {
     void find_desired_move()
     {
         space[] avail = current_space.get_connections();
-
+        List<space> valid = new List<space>();
         foreach(space s in avail)
         {
             if(s != null && !s.broken && !s.is_obstacle)
             {
-                next_space = s;
-                move();
-                break;
+                valid.Add(s);
             }
         }
+        if(valid.Count > 0)
+        {
+            next_space = valid[(int)Random.Range(0, valid.Count)];
+            move();
+        }
+        
+        
     }
 
     private void move()
@@ -83,7 +88,7 @@ public class AI_behaviour : MonoBehaviour {
     {
         if(collision.transform.tag == "Player")
         {
-            Debug.Log("Game over");
+            collision.transform.GetComponent<Player_cube>().hit_player();
         }
     }
 }

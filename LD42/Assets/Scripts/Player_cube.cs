@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player_cube : MonoBehaviour {
 
@@ -10,24 +11,21 @@ public class Player_cube : MonoBehaviour {
     // Lerping between spaces
     float fraction = 0.0f, increment = 0.2f;    // increase increment to make transition faster
 
-    // animation tests
-    Animation ani;
-    public AnimationClip[] clips;
-    public int curr_clip = 0; // this index indicates which animatin should be playing, 0 : idle, 1 : jump, 2 : celebrate 
-
     public Follower cam;
+
+    // Last minute solution for fading, figure out how to better handle this in the future!
+    public fade_to_black fd;
+
+    public mc_animator anim;
 
     // Use this for initialization
     void Start ()
     {
-        ani = GetComponent<Animation>();
-        ani.clip = clips[curr_clip];
+
 	}
 
 	// Update is called once per frame
 	void Update () {
-
-        ani.Play();
 
         // handle input
 
@@ -81,8 +79,13 @@ public class Player_cube : MonoBehaviour {
     {
         current_space.decay();
         current_space = space_to_move_to;
-
+        anim.set_clip(1);
         print(current_space.space_connected_to_goal());
+
+        if(!current_space.space_connected_to_goal())
+        {
+            // Should reload scene now!
+        }
 
         space_to_move_to = null;
 
@@ -90,7 +93,6 @@ public class Player_cube : MonoBehaviour {
         if (current_space.is_key)
         {
             current_space.obstacle_space.remove_obstacle();
-
         }
     }
 
@@ -98,21 +100,37 @@ public class Player_cube : MonoBehaviour {
     void float_away()
     {
         cam.following = false;
-
+        anim.set_clip(2);
         transform.position += Vector3.forward * 10 * Time.deltaTime;
         current_space.transform.position += Vector3.forward * 10 * Time.deltaTime;
+        StartCoroutine(fade());
+        StartCoroutine(load_next(0.90f));
     }
 
-    // Redundant
-    IEnumerator move_player(Vector3 pos) 
+    // called when AI hits player
+    public void hit_player()
     {
-        Vector3 to = new Vector3(pos.x, pos.y + 0.5f, pos.z);// put player at appropriate height above current space
-        while (fraction <= 1.0f)
-        {
-            fraction += increment;
-            transform.position = Vector3.Lerp(transform.position, to, fraction);
-            yield return new WaitForEndOfFrame();
-        }
-        fraction = 0.0f;
+        cam.start_shake(0.1f);
+        StartCoroutine(restart(0.9f));
+        StartCoroutine(fade());
+        Debug.Log("Do it over again");
+    }
+
+
+    IEnumerator fade()
+    {
+        fd.start_fade();
+        yield return new WaitForSeconds(1.0f);
+    }
+
+    IEnumerator load_next(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        current_space.load_next_scene();
+    }
+    IEnumerator restart(float sec) 
+    {
+        yield return new WaitForSeconds(sec);
+        SceneManager.LoadScene(Application.loadedLevel);
     }
 }
