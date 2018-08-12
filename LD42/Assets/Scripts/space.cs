@@ -19,7 +19,6 @@ public class space : MonoBehaviour {
     public GameObject obstacle;
     public float ray_length = 20;
 
-    public bool key_exists = false;
 	// Use this for initialization
 	void Start ()
     {
@@ -32,7 +31,7 @@ public class space : MonoBehaviour {
 
 	}
 
-    public void get_connections()
+    public space[] get_connections()
     {
         RaycastHit hit;
 
@@ -67,6 +66,8 @@ public class space : MonoBehaviour {
                 connections[3] = hit.transform.gameObject.GetComponent<space>();
             }
         }
+
+        return connections;
     }
 
     // return a valid place to move to, returns null if already visited or no connectio available
@@ -103,7 +104,7 @@ public class space : MonoBehaviour {
                 key_found = true;
             }
 
-            if((key_exists && key_found && goal_found) || (!key_exists && goal_found))
+            if((Game_manager.key_exists && key_found && goal_found) || (!Game_manager.key_exists && goal_found))
             {
                 return true;
             }
@@ -123,14 +124,16 @@ public class space : MonoBehaviour {
 
     public void remove_obstacle()
     {
+
         this.is_obstacle = false;
-        Destroy(this.obstacle);
+        this.obstacle.GetComponent<obstacle_animation_trigger>().play_anim();
     }
 
     // Decay after each visit, if visited enough, break it and fade outue
     public void decay()
     {
-        visits_before_break -= 1;
+        
+        if(visits_before_break > 0) visits_before_break -= 1; // avoid edge case
 
         float fade_amount = 1 - (1 / (visits_before_break + 1));
         StartCoroutine(fade(fade_amount));
@@ -157,6 +160,9 @@ public class space : MonoBehaviour {
             yield return new WaitForEndOfFrame();
         }
         // completely removes this after fading
-        this.gameObject.SetActive(false);
+        if(color.a < 1)
+        {
+            this.gameObject.SetActive(false);
+        }
     }
 }

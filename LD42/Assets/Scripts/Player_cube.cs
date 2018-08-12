@@ -22,8 +22,6 @@ public class Player_cube : MonoBehaviour {
 		
         // handle input
 
-        if (! is_AI)
-        {
             if(Input.GetKeyDown(KeyCode.W))
             {
                 space_to_move_to = current_space.get_connection(3);
@@ -43,7 +41,6 @@ public class Player_cube : MonoBehaviour {
             {
                 space_to_move_to = current_space.get_connection(2);
             }
-        }
 
         if(space_to_move_to != null)
         {
