@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class space : MonoBehaviour {
 
@@ -18,6 +19,8 @@ public class space : MonoBehaviour {
     public space obstacle_space; // For key space to unlock obstackle space
     public GameObject obstacle;
     public float ray_length = 20;
+
+    public Scene next_scene;
 
 	// Use this for initialization
 	void Start ()
@@ -164,5 +167,10 @@ public class space : MonoBehaviour {
         {
             this.gameObject.SetActive(false);
         }
+    }
+
+    public void load_next_scene()
+    {
+        SceneManager.LoadScene(next_scene.name);
     }
 }

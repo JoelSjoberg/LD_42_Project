@@ -10,16 +10,25 @@ public class Player_cube : MonoBehaviour {
     // Lerping between spaces
     float fraction = 0.0f, increment = 0.2f;    // increase increment to make transition faster
 
-    public bool is_AI = false;
+    // animation tests
+    Animation ani;
+    public AnimationClip[] clips;
+    public int curr_clip = 0; // this index indicates which animatin should be playing, 0 : idle, 1 : jump, 2 : celebrate 
+
+    public Follower cam;
 
     // Use this for initialization
-    void Start () {
-
+    void Start ()
+    {
+        ani = GetComponent<Animation>();
+        ani.clip = clips[curr_clip];
 	}
 
 	// Update is called once per frame
 	void Update () {
-		
+
+        ani.Play();
+
         // handle input
 
             if(Input.GetKeyDown(KeyCode.W))
@@ -60,6 +69,12 @@ public class Player_cube : MonoBehaviour {
             transform.position = Vector3.Lerp(transform.position, to, fraction);
         }
         else fraction = 0.0f;
+
+
+        if (current_space.is_goal)
+        {
+            float_away();
+        }
     }
 
     private void move()
@@ -70,7 +85,6 @@ public class Player_cube : MonoBehaviour {
         print(current_space.space_connected_to_goal());
 
         space_to_move_to = null;
-        //StartCoroutine(move_player(current_space.transform.position));
 
         // Unlock obstackle space if you found the key
         if (current_space.is_key)
@@ -78,6 +92,15 @@ public class Player_cube : MonoBehaviour {
             current_space.obstacle_space.remove_obstacle();
 
         }
+    }
+
+    // float into victory screen
+    void float_away()
+    {
+        cam.following = false;
+
+        transform.position += Vector3.forward * 10 * Time.deltaTime;
+        current_space.transform.position += Vector3.forward * 10 * Time.deltaTime;
     }
 
     // Redundant
