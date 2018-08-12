@@ -58,14 +58,6 @@ public class AI_behaviour : MonoBehaviour {
         current_space = next_space;
 
         next_space = null;
-
-        // unsure if this should be left here... But it could make the levels more interresting
-        // Unlock obstackle space if you found the key
-        if (current_space.is_key)
-        {
-            current_space.obstacle_space.remove_obstacle();
-
-        }
     }
 
 

@@ -44,7 +44,18 @@ public class Audio_manager : MonoBehaviour {
         s.source.Play();
     }
 
-
+    public void play_random_pitch(string name)
+    {
+        Sound s = Array.Find(sounds, sound => sound.name == name);
+        float temp = s.pitch;
+        s.pitch = UnityEngine.Random.Range(0.2f, 2.9f);
+        s.source.Play();
+        s.pitch = temp;
+    }
+    public void play_random_sound()
+    {
+        Sound s = sounds[(int)UnityEngine.Random.Range(1f, 5f)];
+    }
 
     // Use this for initialization
     void Start () {

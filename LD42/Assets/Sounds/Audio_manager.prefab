@@ -1,0 +1,108 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1357099175012116}
+  m_IsPrefabParent: 1
+--- !u!1 &1357099175012116
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4678304941838544}
+  - component: {fileID: 114125257742472500}
+  m_Layer: 0
+  m_Name: Audio_manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4678304941838544
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1357099175012116}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 3.7065184, y: 0.80308723, z: -3.5036974}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114125257742472500
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1357099175012116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6279ac6b2ca98c48ae9b5706c192179, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds:
+  - name: main_theme
+    clip: {fileID: 8300000, guid: d3faec279eacfc94e94891c1ac33675f, type: 3}
+    volume: 0.125
+    pitch: 1
+    source: {fileID: 0}
+    loop: 1
+  - name: click
+    clip: {fileID: 8300000, guid: ccb26e8c2c18abc49aa44ee9ca1affa7, type: 3}
+    volume: 0.25
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+  - name: hover
+    clip: {fileID: 8300000, guid: ebf50fe7007d67d41ba6f08958ab0b5f, type: 3}
+    volume: 0.25
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+  - name: jump
+    clip: {fileID: 8300000, guid: 2d0c3de8e2d517d4c9699a09622aa4f6, type: 3}
+    volume: 0.25
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+  - name: win
+    clip: {fileID: 8300000, guid: 7365f245c5dfc5342b9317f568c91124, type: 3}
+    volume: 0.25
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+  - name: wrong
+    clip: {fileID: 8300000, guid: 2396c2c412e1b7d459bf2be9a0619076, type: 3}
+    volume: 0.25
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+  - name: jmp1
+    clip: {fileID: 8300000, guid: 4000a145c5133ed4dbe42bdbfd0800d1, type: 3}
+    volume: 0.25
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+  - name: jmp2
+    clip: {fileID: 8300000, guid: 848028bde693e794b868b67dff8c1bb4, type: 3}
+    volume: 0.25
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+  - name: jmp3
+    clip: {fileID: 8300000, guid: a8f0dfa8b06c9564aa823744175c5963, type: 3}
+    volume: 0.25
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0

@@ -21,12 +21,14 @@ public class Follower : MonoBehaviour {
         cam = GetComponent<Camera>();
         origin_orto_size = cam.orthographicSize;
 
+        subject_to_follow = FindObjectOfType<Player_cube>().transform;
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
         Vector3 dest = new Vector3(subject_to_follow.position.x + delta.x, transform.position.y, subject_to_follow.position.z + delta.z);
-		if(following)
+        if (following)
         {
             transform.position = Vector3.Lerp(transform.position, dest, speed * Time.deltaTime);
         }

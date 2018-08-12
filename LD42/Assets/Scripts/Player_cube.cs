@@ -8,6 +8,9 @@ public class Player_cube : MonoBehaviour {
     public space current_space;
     private space space_to_move_to = null;
 
+    private string[] sounds = { "jmp1", "jmp2", "jmp3" };
+    private int sound_index = 0;
+
     // Lerping between spaces
     float fraction = 0.0f, increment = 0.2f;    // increase increment to make transition faster
 
@@ -18,10 +21,14 @@ public class Player_cube : MonoBehaviour {
 
     public mc_animator anim;
 
+    Audio_manager am;
+
     // Use this for initialization
     void Start ()
     {
-
+        am = FindObjectOfType<Audio_manager>();
+        cam = FindObjectOfType<Follower>();
+        fd = FindObjectOfType<fade_to_black>();
 	}
 
 	// Update is called once per frame
@@ -29,7 +36,7 @@ public class Player_cube : MonoBehaviour {
 
         // handle input
 
-            if(Input.GetKeyDown(KeyCode.W))
+        if (Input.GetKeyDown(KeyCode.W))
             {
                 space_to_move_to = current_space.get_connection(3);
             }
@@ -77,28 +84,37 @@ public class Player_cube : MonoBehaviour {
 
     private void move()
     {
+        
         current_space.decay();
         current_space = space_to_move_to;
-        anim.set_clip(1);
-        print(current_space.space_connected_to_goal());
-
-        if(!current_space.space_connected_to_goal())
-        {
-            // Should reload scene now!
-        }
-
         space_to_move_to = null;
+        anim.set_clip(1);
 
+        if (!current_space.space_connected_to_goal())
+        {
+            // reload scene 
+            hit_player();
+        }
+        
+
+        am.play(sounds[sound_index]);
+        sound_index = (sound_index + 1) % sounds.Length;
         // Unlock obstackle space if you found the key
         if (current_space.is_key)
         {
+            am.play("hover");
             current_space.obstacle_space.remove_obstacle();
+        }
+        if (current_space.is_goal)
+        {
+            am.play("win");
         }
     }
 
     // float into victory screen
     void float_away()
     {
+        
         cam.following = false;
         anim.set_clip(2);
         transform.position += Vector3.forward * 10 * Time.deltaTime;
@@ -110,10 +126,10 @@ public class Player_cube : MonoBehaviour {
     // called when AI hits player
     public void hit_player()
     {
+        am.play("wrong");
         cam.start_shake(0.1f);
         StartCoroutine(restart(0.9f));
         StartCoroutine(fade());
-        Debug.Log("Do it over again");
     }
 
 
